@@ -1,0 +1,83 @@
+Usage: gitall.sh [Switches] [path] [git args [AND git args ...]]
+
+Switches:
+    --help, -h      : show this help message and exit
+
+    -v              : show each command being executed
+    -q              : only show the output of git commands
+                      (with blank lines between repos)
+    -l              : only lists commands to be executed.
+                      (with -q, produces script formatted output)
+
+    -a              : apply command to all repos (Default)
+    -m              : apply command to repos on master 
+    -M              : apply command to repos not on master
+                      (equivalent to: -b -n )
+    -n              : apply command to repos on a hash (no branch)
+    -N              : apply command to repos not on a hash
+                      (equivalent to: -m -b )
+    -b              : apply command to repos on a branch
+    -B              : apply command to repos not on a branch
+                      (equivalent to: -m -n )
+
+    -c              : apply command to repos which are clean
+    -C              : apply command to repos which are not clean
+                      (equivalent to: -d )
+    -d              : apply command to repos which are dirty
+    -D              : apply command to repos which are not dirty
+                      (equivalent to: -c )
+
+    -p              : don't dereference current directory
+
+    -s [strings] -- : specify strings to match against subdirectories.
+                      (see below)
+
+Arguments:
+    path     : a directory containing git repos (Default: . )
+    git args : arguments to pass to git
+    AND      : individual sets of git args can be separated by the
+               keyword AND
+
+Switches must be specified before Arguments.  Single letter switches
+may be combine (ex: -lqM is equivalent to -l -q -M)  If the first
+Argument happens to be a directory with respect to the current
+working directory, only subdirectories of that repo will be
+considered.  NOTE: If your first git argument happens to be a
+directory of the current directory, you will need to specify a
+first argument of '.' to prevent weirdness.
+
+You can specify strings with -s to match against the the beginning
+of the names of each subdirectory.  Strings are space delimited,
+with the list of strings terminated by a --.  Subdirectories are
+processed on the first matching string, so with '-s s sh --' the
+'sh' would never be applied.
+
+Pairing -l with -q will generate a list of commands which includes
+changing directories and can be copied and pasted to generate the
+results of the command.
+
+
+Useful Examples:
+
+gitall.sh -M checkout master
+   Checkout master on all repos that are not on master.
+
+gitall.sh -s f sh -- checkout -b qq-9999
+   Checkout or create the branch qq-9999 on all repos that start
+   with 'f' or 'sh'.
+
+gitall.sh pull origin master AND fetch
+   execute 'git pull origin master' and 'git fetch' in each repo
+
+
+Git Alias:
+
+You can add an alias for gitall.sh in your .gitconfig to allow
+calling gitall.sh with 'git all'.
+
+[alias]
+    all = "!sh /data/bgb/bin/gitall.sh $@"
+
+Note: Using the alias, git will eat a few arguments (--help, -c).
+   Use -h for help and -D for clean.
+
