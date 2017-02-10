@@ -76,7 +76,7 @@ You can add an alias for gitall.sh in your .gitconfig to allow
 calling gitall.sh with 'git all'.
 
 [alias]
-    all = "!sh /data/bgb/bin/gitall.sh $@"
+    all = "!sh /PATH/TO/gitall.sh $@"
 
 Note: Using the alias, git will eat a few arguments (--help, -c).
    Use -h for help and -D for clean.
