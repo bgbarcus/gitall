@@ -81,7 +81,7 @@ function print_usage
 	echo "calling ${appname} with 'git all'."
 	echo ""
 	echo "[alias]"
-	echo "    all = !sh -c \"$(which ${0}) \$@\""
+	echo "    all = !sh -c \"$(which ${0}) \$@\" -"
 	echo ""
 	echo "Note: Using the alias, git will eat a few arguments (--help, -c)."
 	echo "   Use -h for help and -D for clean."
