@@ -88,32 +88,52 @@ function print_usage
 	echo ""
 }
 
+BLACK=$(tput setaf 0)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+LIME_YELLOW=$(tput setaf 190)
+POWDER_BLUE=$(tput setaf 153)
+BLUE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+CYAN=$(tput setaf 6)
+WHITE=$(tput setaf 7)
+BRIGHT=$(tput bold)
+NORMAL=$(tput sgr0)
+BLINK=$(tput blink)
+REVERSE=$(tput smso)
+UNDERLINE=$(tput smul)
+
 function git_print_header
 {
 	local repo="${1}"
 	local branch="${2}"
 
 	if [[ "${OPT_QUIET}" -eq 0 ]] ; then
-		printf "\033[44m\033[1;35m%20s\033[0m : " "$repo"
+		printf "${YELLOW}${REVERSE}%20s${NORMAL} : " "$repo"
 
 		case "$branch" in
 			master)
-				printf "\033[1;32m$branch\033[0m"
+				printf "${GREEN}$branch${NORMAL}"
 				;;
 
 			"NoBranch")
-				local hash=$(cat .git/HEAD)
-				printf "\033[1;33m$hash\033[0m"
+                if [ -d .git ] ; then
+                    local hash = $(cat .git)
+                else
+				    local hash = $(cat .git/HEAD)
+                fi
+				printf "${CYAN}$hash${NORMAL}"
 				;;
 
 			*)
-				printf "\033[1;34m$branch\033[0m"
+				printf "${GREEN}$branch${NORMAL}"
 				;;
 
 		esac
   
 		if [[ "${STATE_DIRTY}" -eq 1 ]]; then
-			printf " \033[1;31m***\033[0m"
+			printf " ${RED}${REVERSE}***${NORMAL}"
 		fi
 		printf "\n"
 	else
@@ -231,7 +251,7 @@ function git_all_do
 		ArgString='';
 
     else
-		printf "\033[1;31m[!]\033[0m"
+		printf "${WHITE}${REVERSE}[!]${NORMAL}"
         echo " Error: Could not cd into: ${DIR}"
     fi
 }
@@ -370,7 +390,7 @@ if [ "$#" -gt 0 ] ; then
 						;;
 
 					*)
-						printf "\033[1;31m[!]\033[0m"
+						printf "${WHITE}${REVERSE}[!]${NORMAL}"
 						echo " unsupported short option short option: ${argletter}"
 						;;
 				esac
@@ -411,7 +431,7 @@ if [[ "${#}" -ne 0 ]] ; then
 		fi
 	done
 else
-	printf "\033[1;31m[!]\033[0m"
+	printf "${WHITE}${REVERSE}[!]${NORMAL}"
 	echo -n " No arguments to pass to git."
 	if [[ "${OPT_SPECIFIC_REPOS}" -eq 1 ]] ; then
 		echo "  Do you have an unterminated -s?"
